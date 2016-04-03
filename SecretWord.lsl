@@ -1,3 +1,8 @@
+// Version 1.5
+// fix: particles on win to WinnerId
+// add: what the Secret Word was in floatie text
+// change: win floatie text color from red to yellow
+
 // Version 1.4
 // fix: store paid into game to description field and resetting it after a win
 // added sound and particles on win
@@ -54,7 +59,7 @@ integer pattern = PSYS_SRC_PATTERN_ANGLE_CONE_EMPTY;
 // "" for no target, "owner" will follow object owner 
 //    and "self" will target this object
 //    or put the key of an object for particles to go to
-key target = "ecf7ddf6-e6a2-48aa-a191-ef75b39169e7";
+key target = WinnerId;
 
 // Particle paramaters
 float age = 5.0;                  // Life of each particle
@@ -84,6 +89,7 @@ integer flags;
 updateParticles()
 {
     flags = 0;
+    if (target == NULL_KEY || target == "") target = llGetKey();
     if (target == "owner") target = llGetOwner();
     if (target == "self") target = llGetKey();
     if (glow) flags = flags | PSYS_PART_EMISSIVE_MASK;
@@ -286,7 +292,7 @@ state winner
 	    }
 	    
 	    llSay ( PUBLIC_CHANNEL, WinnerName +" said Todays Secret Word: \""+ SecretWord +"\" and won Todays Secret Word Prize of $L"+ (string)PrizeAmount +"!" );
-	    llSetText ( WinnerName +"\n is Todays Secret Word Winner!\nPrize was $L"+ (string)PrizeAmount, <1.0, 0.0, 0.0>, 1.0 );
+	    llSetText ( WinnerName +"\n is Todays Secret Word Winner!\nthe Secret word was: \""+ SecretWord +"\"\nPrize was $L"+ (string)PrizeAmount, <1.0, 1.0, 0.0>, 1.0 );
 	    llInstantMessage ( WinnerId, "Congratulations!  You are Todays Secret Word Prize Winner!\nYou have won Todays Secret Word Prize of $L"+ (string)PrizeAmount );
 	    llInstantMessage ( llGetOwner(), WinnerName +" is Todays Secret Word Winner and won $L"+ (string)PrizeAmount );
 	    //llGiveMoney ( id, PrizeAmount );
