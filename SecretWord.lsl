@@ -1,4 +1,6 @@
-// Version 1.5
+// https://github.com/ilioNaglo/SecretWord
+
+// Version 1.5 - 2016-04-03
 // fix: particles on win to WinnerId
 // add: what the Secret Word was in floatie text
 // change: win floatie text color from red to yellow
