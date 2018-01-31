@@ -147,14 +147,14 @@ default
             llSetText ( "WAITING FOR OWNER PERMISSION", <1.0, 0.0, 0.0>, 1.0 );
             llOwnerSay ( "You must Accept DEBIT Permission" );
         } else {
-           	state waiting;
+            state waiting;
         }
     }
 
     touch_start(integer total_number)
     {
         if ( llDetectedKey(0) == llGetOwner() ) {
-			llResetScript();
+            llResetScript();
         }
     }
 
@@ -183,9 +183,9 @@ state waiting
         llSetColor ( <0.0, 0.0, 0.0>, ALL_SIDES );
         llSetText ( "Todays Secret Word not activated", <1.0, 1.0, 0.0>, 1.0 );
 
-		if ( llGetInventoryNumber ( INVENTORY_SOUND ) ) {
-			SoundName = llGetInventoryName ( INVENTORY_SOUND, 0 );
-		}
+        if ( llGetInventoryNumber ( INVENTORY_SOUND ) ) {
+            SoundName = llGetInventoryName ( INVENTORY_SOUND, 0 );
+        }
 
         llOwnerSay ( "Todays Secret Word not activated\nTouch to activate" );
     }
@@ -193,7 +193,7 @@ state waiting
     touch_start(integer total_number)
     {
         if ( llDetectedKey(0) == llGetOwner() ) {
-			state active;
+            state active;
         }
     }
 }
@@ -209,20 +209,20 @@ state active
     state_entry()
     {
         llSetColor ( <0.0, 0.0, 0.0>, ALL_SIDES );
-		StoredPrizeAmount = (integer)llGetObjectDesc();
-		if ( StoredPrizeAmount > 0 ) {
-			PrizeAmount = StoredPrizeAmount;
-		} else {
-			PrizeAmount = DefaultPrizeAmount;
-			llSetObjectDesc ( (string)PrizeAmount );
-		}
-		llSetTexture ( DefaultTexture, ALL_SIDES );
-		llSetColor ( <1.0, 1.0, 1.0>, ALL_SIDES );
+        StoredPrizeAmount = (integer)llGetObjectDesc();
+        if ( StoredPrizeAmount > 0 ) {
+            PrizeAmount = StoredPrizeAmount;
+        } else {
+            PrizeAmount = DefaultPrizeAmount;
+            llSetObjectDesc ( (string)PrizeAmount );
+        }
+        llSetTexture ( DefaultTexture, ALL_SIDES );
+        llSetColor ( <1.0, 1.0, 1.0>, ALL_SIDES );
 
-       	llOwnerSay ( "Todays Secret Word is: "+ SecretWord +"\nPrize Amount is $L"+ (string)PrizeAmount );
+        llOwnerSay ( "Todays Secret Word is: "+ SecretWord +"\nPrize Amount is $L"+ (string)PrizeAmount );
         llSetText ( "Todays Secret Word Prize is $L"+ (string)PrizeAmount, <1.0, 1.0, 1.0>, 1.0 );
-				
-		GameOver = FALSE;
+                
+        GameOver = FALSE;
         Active = TRUE;
         ListenCallback = llListen ( PUBLIC_CHANNEL, "", NULL_KEY, "" );
     }
@@ -230,8 +230,8 @@ state active
     touch_start(integer total_number)
     {
         if ( llDetectedKey(0) == llGetOwner() ) {
-	        llListenRemove ( ListenCallback );
-			state waiting;
+            llListenRemove ( ListenCallback );
+            state waiting;
         } else {
             llSay ( 0, "Anyone may Pay into Secret Word to add to the Secret Word Pot." );
         }
@@ -254,18 +254,18 @@ state active
             
             // we have a winner!
             llListenRemove ( ListenCallback );
-			GameOver = TRUE;
-			WinnerId = id;
-			WinnerName = name;
-			state winner;
+            GameOver = TRUE;
+            WinnerId = id;
+            WinnerName = name;
+            state winner;
         }
     }
     
     money ( key id, integer amount )
     {
-       	string doner_name = llKey2Name(id);
+        string doner_name = llKey2Name(id);
         PrizeAmount += amount;
-		llSetObjectDesc ( (string)PrizeAmount );
+        llSetObjectDesc ( (string)PrizeAmount );
         llSay ( PUBLIC_CHANNEL, doner_name +" added $L"+ (string)amount +" to Todays Secret Word Prize!\nTodays Secret Word Prize is now $L"+ (string)PrizeAmount +"\nThank You, "+ doner_name +"!" );
         llSetText ( "Todays Secret Word Prize is $L"+ (string)PrizeAmount, <1.0, 1.0, 1.0>, 1.0 );
         llInstantMessage ( id, "Thank You for your $L"+ (string)amount +" donation!\nTodays Secret Word Prize is now $L"+ (string)PrizeAmount );
@@ -275,31 +275,31 @@ state active
 
 state winner
 {
-	on_rez ( integer sp )
-	{
-		llResetScript();
-	}
+    on_rez ( integer sp )
+    {
+        llResetScript();
+    }
 
-	state_entry()
-	{
-		if ( SoundName != "" ) {
-			llPlaySound ( SoundName, 1.0 );
-		}
-		llSetTexture ( GameOverTexture, ALL_SIDES );
+    state_entry()
+    {
+        if ( SoundName != "" ) {
+            llPlaySound ( SoundName, 1.0 );
+        }
+        llSetTexture ( GameOverTexture, ALL_SIDES );
         updateParticles();
-		
-	    string displayName = llGetDisplayName(WinnerId);
-	    if ( displayName != "" ) {
-	    	WinnerName = displayName +" ("+ WinnerName +")";
-	    }
-	    
-	    llSay ( PUBLIC_CHANNEL, WinnerName +" said Todays Secret Word: \""+ SecretWord +"\" and won Todays Secret Word Prize of $L"+ (string)PrizeAmount +"!" );
-	    llSetText ( WinnerName +"\n is Todays Secret Word Winner!\nthe Secret word was: \""+ SecretWord +"\"\nPrize was $L"+ (string)PrizeAmount, <1.0, 1.0, 0.0>, 1.0 );
-	    llInstantMessage ( WinnerId, "Congratulations!  You are Todays Secret Word Prize Winner!\nYou have won Todays Secret Word Prize of $L"+ (string)PrizeAmount );
-	    llInstantMessage ( llGetOwner(), WinnerName +" is Todays Secret Word Winner and won $L"+ (string)PrizeAmount );
-	    //llGiveMoney ( id, PrizeAmount );
-	    TransactionResult = llTransferLindenDollars ( WinnerId, PrizeAmount );
-	}
+        
+        string displayName = llGetDisplayName(WinnerId);
+        if ( displayName != "" ) {
+            WinnerName = displayName +" ("+ WinnerName +")";
+        }
+        
+        llSay ( PUBLIC_CHANNEL, WinnerName +" said Todays Secret Word: \""+ SecretWord +"\" and won Todays Secret Word Prize of $L"+ (string)PrizeAmount +"!" );
+        llSetText ( WinnerName +"\n is Todays Secret Word Winner!\nthe Secret word was: \""+ SecretWord +"\"\nPrize was $L"+ (string)PrizeAmount, <1.0, 1.0, 0.0>, 1.0 );
+        llInstantMessage ( WinnerId, "Congratulations!  You are Todays Secret Word Prize Winner!\nYou have won Todays Secret Word Prize of $L"+ (string)PrizeAmount );
+        llInstantMessage ( llGetOwner(), WinnerName +" is Todays Secret Word Winner and won $L"+ (string)PrizeAmount );
+        //llGiveMoney ( id, PrizeAmount );
+        TransactionResult = llTransferLindenDollars ( WinnerId, PrizeAmount );
+    }
 
     transaction_result (key requestid, integer success, string msg )
     {
@@ -314,7 +314,7 @@ state winner
                 llInstantMessage ( llGetOwner(), "Todays Secret Word Prize of $L"+ (string)PrizeAmount +" FAILED delivery with Transaction Key "+ (string)TransactionResult +"\n"+ msg);
                 llInstantMessage ( winnerkey, "Sorry, Todays Secret Word Prize of $L"+ (string)PrizeAmount +" FAILED delivery with Transaction Key "+ (string)TransactionResult +"\nPlease contact "+ OwnerName +" to resolve this issue" );
             }
-			state gameover;
+            state gameover;
         }
     }
 }
@@ -326,22 +326,21 @@ state gameover
         llResetScript();
     }
 
-	state_entry()
-	{
-		llSetObjectDesc ( (string)DefaultPrizeAmount );
+    state_entry()
+    {
+        llSetObjectDesc ( (string)DefaultPrizeAmount );
         llInstantMessage ( llGetOwner(), "Todays Secret Word Game is over.\nThe Prize for the next game is reset to $L"+ (string)DefaultPrizeAmount );
-		PrizeAmount = DefaultPrizeAmount;
- 	}
+        PrizeAmount = DefaultPrizeAmount;
+    }
 
     money ( key id, integer amount )
     {
         PrizeAmount += amount;
-       	string doner_name = llKey2Name(id);
+        string doner_name = llKey2Name(id);
 
-		llSetObjectDesc ( (string)PrizeAmount );
+        llSetObjectDesc ( (string)PrizeAmount );
         llSay ( PUBLIC_CHANNEL, doner_name +" added $L"+ (string)amount +" for the next Secret Word Prize!\nThe next Secret Word Prize is now $L"+ (string)PrizeAmount +"\nThank You, "+ doner_name +"!" );
         llInstantMessage ( id, "Thank You for your $L"+ (string)amount +" donation!\nThe next Secret Word Prize is now $L"+ (string)PrizeAmount );
-		llInstantMessage ( llGetOwner(), doner_name +" added $L"+ (string)amount +" for the next Secret Word Prize!\nThe next Secret Word Prize is now $L"+ (string)PrizeAmount );
+        llInstantMessage ( llGetOwner(), doner_name +" added $L"+ (string)amount +" for the next Secret Word Prize!\nThe next Secret Word Prize is now $L"+ (string)PrizeAmount );
     }
 }
-
