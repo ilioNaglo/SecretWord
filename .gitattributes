@@ -15,3 +15,6 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+
+secretfile filter=git-crypt diff=git-crypt
+*.key filter=git-crypt diff=git-crypt
